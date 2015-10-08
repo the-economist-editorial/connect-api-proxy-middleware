@@ -1,40 +1,31 @@
 'use strict';
 
-import Proxy from '../index';
+import { constructUrl, fetch, article, menu } from '../index';
 import sinon from 'sinon';
 import request from 'request';
 
 let chai = require('chai').use(require('chai-as-promised')).should();
-let proxy;
 
 describe('API Proxy Middleware', () => {
-  before(() => {
-    proxy = new Proxy();
-  });
-
   it('has a constructUrl method', () => {
-    proxy.constructUrl.should.be.a.function
+    constructUrl.should.be.a.function
   });
 
   it('has a fetch method', () => {
-    proxy.fetch.should.be.a.function
+    fetch.should.be.a.function
   });
 
   it('has an article method', () => {
-    proxy.article.should.be.a.function
+    article.should.be.a.function
   });
 
   it('has a menu method', () => {
-    proxy.menu.should.be.a.function
+    menu.should.be.a.function
   });
 
   describe('constructUrl', () => {
-    before(() => {
-      proxy = new Proxy('foo/bar/');
-    });
-
     it('constructs the correct api url', () => {
-      proxy.constructUrl('baz/','biz').should.equal('foo/bar/baz/biz');
+      constructUrl('baz/','biz').should.equal('http://dev-cms-worldin.economist.com/contentasjson/baz/biz');
     });
   });
 
@@ -42,8 +33,6 @@ describe('API Proxy Middleware', () => {
     let body = { foo: 'bar' };
 
     beforeEach(() => {
-      proxy = new Proxy('foo/bar/');
-
       sinon.stub(request, 'get');
     });
 
@@ -53,13 +42,13 @@ describe('API Proxy Middleware', () => {
 
     it('returns a resolved promise', () => {
       request.get.callsArgWith(1, null, { statusCode: 200 }, body);
-      return proxy.fetch('some/api/url').should.eventually.equal(body);
+      return fetch('some/api/url').should.eventually.equal(body);
     });
 
     it('rejects if there is an error', () => {
       request.get.callsArgWith(1, new Error('foo'), { statusCode: 500 });
 
-      return proxy.fetch('some/api/url')
+      return fetch('some/api/url')
         .then(function() {
           throw new Error('Promise should not succeed');
         }, function(e) {
@@ -72,37 +61,33 @@ describe('API Proxy Middleware', () => {
     let response = { bar: 'baz' };
 
     before(() => {
-      proxy = new Proxy('foo/bar/');
-
-      sinon.stub(proxy, 'fetch').returns(Promise.resolve(response));
+      sinon.stub(request, 'get').returns(Promise.resolve(response));
     });
 
     after(() => {
-      proxy.fetch.restore();
+      request.get.restore();
     });
 
     it('returns a promise', () => {
-      proxy.article(1).should.be.an.instanceOf(Promise);
-      proxy.article(1).should.eventually.equal(response);
+      article(1).should.be.an.instanceOf(Promise);
+      article(1).should.eventually.equal(response);
     });
   });
 
   describe('menu', () => {
     let response = { bar: 'baz' };
 
-    beforeEach(() => {
-      proxy = new Proxy('foo/bar/');
-
-      sinon.stub(proxy, 'fetch').returns(Promise.resolve(response));
+    before(() => {
+      sinon.stub(request, 'get').returns(Promise.resolve(response));
     });
 
     after(() => {
-      proxy.fetch.restore();
+      request.get.restore();
     });
 
     it('returns a promise', () => {
-      proxy.menu('funky-menu').should.be.an.instanceOf(Promise);
-      proxy.menu('funky-menu').should.eventually.equal(response);
+      menu('funky-menu').should.be.an.instanceOf(Promise);
+      menu('funky-menu').should.eventually.equal(response);
     });
   });
 });
