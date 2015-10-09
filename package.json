@@ -31,6 +31,7 @@
     "babel": "^5.8.23",
     "chai": "^3.3.0",
     "chai-as-promised": "^5.1.0",
+    "connect": "^3.4.0",
     "eslint": "^0.24.0",
     "eslint-config-strict": "^2.4.0",
     "eslint-plugin-filenames": "^0.1.1",
@@ -38,7 +39,10 @@
     "istanbul": "^0.3.17",
     "mocha": "^2.3.3",
     "pre-commit": "^1.0.10",
-    "sinon": "^1.17.1"
+    "sinon": "^1.17.1",
+    "supertest": "^1.1.0",
+    "supertest-as-promised": "^2.0.2",
+    "url": "^0.11.0"
   },
   "pre-commit": [
     "lint"

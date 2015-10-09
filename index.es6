@@ -1,20 +1,22 @@
 'use strict';
 
 import request from 'request';
+import url from 'url';
 
 export function constructUrl(endpoint, id) {
-  return 'http://dev-cms-worldin.economist.com/contentasjson/' + endpoint + id;
+  let apiHost = (process.env.NODE_ENV === 'production') ? 'cms-worldin' : 'dev-cms-worldin';
+  return 'http://' + apiHost +  '.economist.com/contentasjson/' + endpoint + id;
 }
 
 export function fetch (url) {
   return new Promise(function(resolve, reject) {
     request.get(url, function(error, response, body) {
-      if (!error && response.statusCode === 200) {
-        resolve(body);
+      if (!error && response.statusCode === 200 && response.headers['content-type'] === 'application/json') {
+          resolve(body);
       } else {
-        let error = new Error('HTTP request ' + response.statusCode + ' to ' + url);
-				error.status = response.statusCode;
-        reject(error);
+        let err = new Error('HTTP request ' + response.statusCode + ' to ' + url);
+				err.status = response.statusCode;
+        reject(err);
       }
     });
   }).catch(function(error) {
@@ -22,30 +24,20 @@ export function fetch (url) {
   });
 }
 
-export function article (id) {
-  return fetch(constructUrl('node/', id));
+export function pathParts (u) {
+  return url.parse(u).pathname.match(/([^\/]+)/g);
 }
 
-export function menu (menu) {
-  return fetch(constructUrl('menu/', menu));
+export function article (request, response, next) {
+  return fetch(constructUrl('node/', pathParts(request.url)[0])).then(function(data) {
+      response.setHeader('Cache-Control', 'public, max-age=60');
+      response.end(data);
+    }).catch(next);
 }
 
-export default function(app) {
-  app.get('api/article/:id([0-9]+)', function(req, res, next) {
-    let id = req.params.id;
-
-    article(id).then(function(data) {
-      res.setHeader('Cache-Control', 'public, max-age=60');
-      res.json(data);
+export function menu (request, response, next) {
+  return fetch(constructUrl('menu/', pathParts(request.url)[0])).then(function(data) {
+      response.setHeader('Cache-Control', 'public, max-age=60');
+      response.end(data);
     }).catch(next);
-  });
-
-  app.get('api/:menuName', function(req, res, next) {
-    let menuName = req.params.menuName;
-
-    menu(menuName).then(function(data) {
-      res.setHeader('Cache-Control', 'public, max-age=60');
-      res.json(data);
-    }).catch(next);
-  });
 }
