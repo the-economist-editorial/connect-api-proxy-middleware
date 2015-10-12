@@ -11,13 +11,19 @@ export function constructUrl(endpoint, id) {
 export function fetch (url) {
   return new Promise(function(resolve, reject) {
     request.get(url, function(error, response, body) {
-      if (!error && response.statusCode === 200 && response.headers['content-type'] === 'application/json') {
-          resolve(body);
-      } else {
-        let err = new Error('HTTP request ' + response.statusCode + ' to ' + url);
-				err.status = response.statusCode;
-        reject(err);
+      if (error) {
+        error = new Error('HTTP request ' + error.message + ' to ' + url);
+        error.status = 500;
+        return reject(error);
       }
+
+      if (!response || response.statusCode > 399) {
+        error = new Error('HTTP request ' + response.statusCode + ' to ' + url);
+				error.status = response.statusCode;
+        return reject(error);
+      }
+
+      return resolve(body);
     });
   }).catch(function(error) {
     throw error;
@@ -31,13 +37,20 @@ export function pathParts (u) {
 export function article (request, response, next) {
   return fetch(constructUrl('node/', pathParts(request.url)[0])).then(function(data) {
       response.setHeader('Cache-Control', 'public, max-age=60');
+      response.setHeader('Content-Type', 'application/json');
       response.end(data);
     }).catch(next);
 }
 
 export function menu (request, response, next) {
   return fetch(constructUrl('menu/', pathParts(request.url)[0])).then(function(data) {
-      response.setHeader('Cache-Control', 'public, max-age=60');
+      response.setHeader('Cache-Control', 'public, max-age=3600');
+      response.setHeader('Content-Type', 'application/json');
       response.end(data);
     }).catch(next);
+}
+
+export default {
+  article: article,
+  menu: menu
 }
