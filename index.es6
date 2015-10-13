@@ -37,12 +37,12 @@ export function pathParts (u) {
 }
 
 export default function(request, response, next) {
-  let opts = this || {};
+    let options = this || {};
 
-  return fetch(opts.api + (pathParts(request.url)[0] || '' ))
-    .then(function(data) {
-      response.setHeader('Cache-Control', 'public, max-age=' + opts.cache || 60);
-      response.setHeader('Content-Type', opts.contentType || 'application/json');
-      response.end(data);
-    }).catch(next);
+    return fetch(options.api + (pathParts(request.url)[0] || '' ))
+      .then(function(data) {
+        response.setHeader('Cache-Control', 'public, max-age=' + options.cache || 60);
+        response.setHeader('Content-Type', options.contentType || 'application/json');
+        response.end(data);
+      }).catch(next);
 }

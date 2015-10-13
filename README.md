@@ -12,12 +12,12 @@ import connect from 'connect';
 let app = connect();
 
 app
-  .use('/api/article', proxy.bind({  // expects url param to be an article id or menu name
+  .use('/api/article', proxy({  // expects url param to be an article id or menu name
     api: 'http://www.someapi.com/thing', // Required
     cache: 3600, //seconds - 60 by default
     contentType: 'application/xml' // application/json by default
   }))
-  .use('/api/menu', proxy.bind({  // expects url param to be an article id or menu name
+  .use('/api/menu', proxy({  // expects url param to be an article id or menu name
     api: 'http://www.someotherapi.com/stuff', // Required
     cache: 120, //seconds - 60 by default
     contentType: 'text/xml' // application/json by default
