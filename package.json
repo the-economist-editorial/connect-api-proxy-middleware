@@ -1,6 +1,6 @@
 {
   "name": "@economist/connect-api-proxy-middleware",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "A Connect middleware for Economist Drupal API",
   "author": "The Economist (http://economist.com)",
   "license": "LicenseRef-LICENSE",
