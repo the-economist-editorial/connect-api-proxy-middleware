@@ -1,0 +1,50 @@
+{
+  "name": "@economist/connect-api-proxy-middleware",
+  "version": "1.0.0",
+  "description": "A Connect middleware for Economist Drupal API",
+  "author": "The Economist (http://economist.com)",
+  "license": "LicenseRef-LICENSE",
+  "repository": "git://github.com/economist/connect-api-proxy-middleware",
+  "homepage": "https://github.com/economist/connect-api-proxy-middleware",
+  "bugs": "https://github.com/economist/connect-api-proxy-middleware/issues",
+  "main": "index.es6",
+  "config": {
+    "lint_opts": "--ignore-path .gitignore",
+    "mocha_opts": "-r @economist/component-testharness",
+    "coverage_opts": "--statements 95 --branches 95 --lines 95 --functions 95"
+  },
+  "eslintConfig": {
+    "extends": "strict/es6"
+  },
+  "scripts": {
+    "lint": "eslint $npm_package_config_lint_opts .",
+    "test": "npm run test:cover -- -R tap && npm run test:checkcoverage",
+    "test:cover": "istanbul cover _mocha -- $npm_package_config_mocha_opts",
+    "test:watch": "mocha $npm_package_config_mocha_opts -wR min",
+    "test:checkcoverage": "istanbul check-coverage $npm_package_config_coverage_opts"
+  },
+  "dependencies": {
+    "request": "^2.64.0"
+  },
+  "devDependencies": {
+    "@economist/component-testharness": "^1.1.0",
+    "babel": "^5.8.23",
+    "chai": "^3.3.0",
+    "chai-as-promised": "^5.1.0",
+    "connect": "^3.4.0",
+    "eslint": "^0.24.0",
+    "eslint-config-strict": "^2.4.0",
+    "eslint-plugin-filenames": "^0.1.1",
+    "eslint-plugin-one-variable-per-var": "^0.0.3",
+    "istanbul": "^0.3.17",
+    "mocha": "^2.3.3",
+    "pre-commit": "^1.0.10",
+    "sinon": "^1.17.1",
+    "supertest": "^1.1.0",
+    "supertest-as-promised": "^2.0.2",
+    "url": "^0.11.0"
+  },
+  "pre-commit": [
+    "lint"
+  ]
+}
