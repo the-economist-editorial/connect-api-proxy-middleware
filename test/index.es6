@@ -14,7 +14,7 @@ const bad404Response = { statusCode: 404, headers: { 'content-type': 'applicatio
 let app = connect();
 let chai = require('chai').use(require('chai-as-promised')).should();
 
-app.use('/api/article', proxy.bind({
+app.use('/api/article', proxy({
   api: 'http://dev-cms-worldin.economist.com/contentjson/node/',
   cache: 60
 }));

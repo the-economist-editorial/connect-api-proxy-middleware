@@ -36,13 +36,15 @@ export function pathParts (u) {
   return url.parse(u).pathname.match(/([^\/]+)/g);
 }
 
-export default function(request, response, next) {
-    let options = this || {};
+export default function(options) {
+    options = options || {};
 
-    return fetch(options.api + (pathParts(request.url)[0] || '' ))
-      .then(function(data) {
-        response.setHeader('Cache-Control', 'public, max-age=' + options.cache || 60);
-        response.setHeader('Content-Type', options.contentType || 'application/json');
-        response.end(data);
-      }).catch(next);
+    return function(request, response, next) {
+      return fetch(options.api + (pathParts(request.url)[0] || '' ))
+        .then(function(data) {
+          response.setHeader('Cache-Control', 'public, max-age=' + options.cache || 60);
+          response.setHeader('Content-Type', options.contentType || 'application/json');
+          response.end(data);
+        }).catch(next);
+    }
 }
