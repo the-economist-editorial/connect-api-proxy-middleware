@@ -1,0 +1,20 @@
+GET /contentasjson/node/10523
+accept-encoding: gzip,deflate
+accept: */*
+
+HTTP/1.1 200 OK
+date: Thu, 15 Oct 2015 16:02:36 GMT
+server: Apache
+x-drupal-cache: MISS
+expires: Sun, 19 Nov 1978 05:00:00 GMT
+last-modified: Thu, 15 Oct 2015 16:02:36 GMT
+cache-control: no-cache, must-revalidate, post-check=0, pre-check=0
+etag: "1444924956"
+content-language: en
+set-cookie: SESSf651b1780478cd693701813350fcb162=-WB_xJxUie9KhIHiWIw7O0p442WJEXuBubtyEHpEGLY; expires=Sat, 07-Nov-2015 19:35:56 GMT; Max-Age=2000000; path=/; domain=.dev-cms-worldin.economist.com; HttpOnly
+x-backend-server: web1 D=201363
+connection: close
+transfer-encoding: chunked
+content-type: application/json
+
+{"type":"twi_2016_article","id":"10523","attributes":{"metaTags":[{"property":"og:type","content":"twi_2016_article"},{"property":"og:title","content":"Test article"},{"property":"og:description","content":""},{"property":"og:image","content":"http:\/\/dev-cms-worldin.economist.com\/"},{"property":"og:image:width","content":null},{"property":"og:image:height","content":null},{"property":"twi_2016_article:published_time","content":"2015-10-13T16:09:24:673Z"},{"property":"twi_2016_article:modified_time","content":"2015-10-13T16:09:24:673Z"},{"property":"twi_2016_article:section","content":null}],"show_as_published_web":"0","section":null,"mainimage":{"1.0x":"http:\/\/dev-cms-worldin.economist.com\/","1.3x":"http:\/\/dev-cms-worldin.economist.com\/sites\/default\/files\/styles\/width1190\/public?itok=-psyJKv6","1.5x":"http:\/\/dev-cms-worldin.economist.com\/sites\/default\/files\/styles\/width1024\/public?itok=RVY8Nvn-","2.0x":"http:\/\/dev-cms-worldin.economist.com\/sites\/default\/files\/styles\/width568\/public?itok=z-FfYHhv","3.0x":"http:\/\/dev-cms-worldin.economist.com\/"},"title":"Test article","toc":"","flytitle":"","slug":"content\/test-article","dateline":"","rubric":"","content":""}}
