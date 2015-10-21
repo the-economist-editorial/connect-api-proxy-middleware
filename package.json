@@ -18,10 +18,7 @@
   },
   "eslintConfig": {
     "parser": "babel-eslint",
-    "extends": [
-      "strict/es6",
-      "strict/mocha"
-    ]
+    "extends": "strict/es6"
   },
   "scripts": {
     "lint": "eslint $npm_package_config_lint_opts .",

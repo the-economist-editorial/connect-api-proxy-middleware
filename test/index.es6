@@ -1,3 +1,4 @@
+/* global describe it  */
 import proxy, { constructUrl } from '../index';
 import connect from 'connect';
 import chai from 'chai';
