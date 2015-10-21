@@ -1,0 +1,20 @@
+GET /contentasjson/node/bananas:javascript:javascript:alert(1)
+accept-encoding: gzip,deflate
+accept: */*
+
+HTTP/1.1 404 
+date: Wed, 21 Oct 2015 09:53:36 GMT
+server: Apache
+x-drupal-cache: MISS
+etag: "1445421216-0"
+content-language: en
+cache-control: public, max-age=900
+last-modified: Wed, 21 Oct 2015 09:53:36 GMT
+expires: Sun, 19 Nov 1978 05:00:00 GMT
+vary: Cookie
+x-backend-server: web1 D=142885
+connection: close
+transfer-encoding: chunked
+content-type: application/json
+
+{"error":"The content doesn\u0027t exist. The arguments were (node) and (bananas:javascript:javascript:alert(1))"}

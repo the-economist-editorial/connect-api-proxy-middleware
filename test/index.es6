@@ -1,34 +1,35 @@
-'use strict';
-
-import proxy, { pathParts } from '../index';
+import proxy, { constructUrl } from '../index';
 import connect from 'connect';
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import Replay from 'replay';
 
-// Replay.mode = 'record';
+Replay.mode = 'record';
 
-const subDomain = (process.env.NODE_ENV === 'production') ? 'cms-worldin' : 'dev-cms-worldin';
+const subDomain = (process.env.NODE_ENV === 'production') ? 'cms-worldin' : 'dev2-cms-worldin';
 const economistProxy = proxy(`http://${subDomain}.economist.com/contentasjson/`);
+const app = connect();
+const responseCodes = {
+  success: 200,
+  clientError: 404,
+};
+chai.use(chaiHttp).should();
 
-let app = connect();
-
-chai.use(chaiHttp).use(spies).should();
-
-app.use('/api/article', economistProxy('node/', {
+app.use('/api/article', economistProxy('node', {
   headerOverrides: {
     'cache-control': 'public, max-age=60',
-  }
+    'last-modified': 'Wed, 21 Oct 2015 10:00:00 GMT',
+  },
 }));
 
 describe('API Proxy Middleware', () => {
-  it('has a pathParts method', () => {
-    pathParts.should.be.a('function');
+  it('has a constructUrl method', () => {
+    constructUrl.should.be.a('function');
   });
 
-  describe('pathParts', () => {
-    it('returns an array of part parts', () => {
-      pathParts('http://a.b.com/one/two').should.deep.equal(['one','two']);
+  describe('constructUrl', () => {
+    it('returns a concatonated string', () => {
+      constructUrl('base/', 'path', '/requestUrl').should.equal('base/path/requestUrl');
     });
   });
 
@@ -36,22 +37,30 @@ describe('API Proxy Middleware', () => {
     it('overides headers where specified', () => {
       return chai.request(app)
         .get('/api/article/10523')
-        .then((res) =>{
-          res.status.should.equal(200);
+        .then((res) => {
+          res.status.should.equal(responseCodes.success);
+          // sent from server
           res.should.have.header('content-type', 'application/json');
+          // overriden by config
           res.should.have.header('cache-control', 'public, max-age=60');
-          res.should.be.json;
+          // overriden by config but not really something that would be done - just for test purposes.
+          res.should.have.header('last-modified', 'Wed, 21 Oct 2015 10:00:00 GMT');
         });
     });
 
-    it('should return a 404 status code for an invalid API end point', () => {
-      return chai.request(app)
-        .get('/api/article/10520')
-        .then((res) =>{
-          res.status.should.equal(404);
+    it('should return a 404 status code for an unavailable article id', () => {
+      return chai.request(app).get('/api/article/10520')
+        .then((res) => {
+          res.status.should.equal(responseCodes.clientError);
           res.should.have.header('content-type', 'application/json');
           res.should.have.header('cache-control', 'public, max-age=60');
-          res.should.be.json;
+        });
+    });
+
+    it('should expose the status code from the server for an invalid request URL', () => {
+      return chai.request(app).get('/api/article/bananas:javascript:javascript:alert(1)')
+        .then((res) => {
+          res.status.should.equal(responseCodes.clientError);
         });
     });
   });

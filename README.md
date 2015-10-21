@@ -1,7 +1,7 @@
 # connect-api-proxy-middleware
 
 This is a [connect middleware][] (can be used with express, or plain old
-`require('http')` as long as you give it a next function) that channels routes through to the Drupal microsite API (e.g. World In/World If).
+`require('http')` as long as you give it a next function) and allows URLs, paths and headers to be supplied and overridden.
 
 Example:
 
@@ -15,11 +15,11 @@ const subDomain = (process.env.NODE_ENV === 'production') ? 'cms-worldin' : 'dev
 const economistProxy = proxy(`http://${subDomain}.economist.com/contentasjson/`);
 
 app
-  .use('/api/article', economistProxy('node/', {
+  .use('/api/article', economistProxy('node', { //expects an id e.g. /api/article/1234 or /api/menu/a-drupal-menu-name
     headerOverrides: {
-      'cache-control': 'public, max-age=60',
+      'cache-control': 'public, max-age=60'
     }
-  }))
+  }))...
 ```
 
 [connect middleware]: https://github.com/senchalabs/connect

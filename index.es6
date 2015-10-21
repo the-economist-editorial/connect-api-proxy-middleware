@@ -1,34 +1,25 @@
-'use strict';
-
 import fetch from 'node-fetch';
-import url from 'url';
 
-export function pathParts (u) {
-  return url.parse(u).pathname.match(/([^\/]+)/g);
+export function constructUrl(base, path, reqUrl) {
+  return base + path + reqUrl;
 }
 
 export default (base) => {
-  const baseURL = base;
-
-  return (path, options) => {
+  const baseUrl = base;
+  return (path, overrides = {}) => {
     return (request, response, next) => {
-      let apiUrl = baseURL + path + (pathParts(request.url)[0] || '');
-
+      const apiUrl = constructUrl(baseUrl, path, request.url);
       fetch(apiUrl).then((fetchResponse) => {
         const fetchResponseHeaders = {
           ...fetchResponse.headers.raw(),
-          ...options.headerOverrides
+          ...overrides.headerOverrides,
         };
-
         for (const header in fetchResponseHeaders) {
           response.setHeader(header, fetchResponseHeaders[header]);
         }
-
         response.statusCode = fetchResponse.status;
-
         fetchResponse.body.pipe(response).on('end', next);
-
       }).catch(next);
-    }
-  }
-}
+    };
+  };
+};
