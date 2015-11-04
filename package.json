@@ -25,7 +25,8 @@
     "test": "./node_modules/.bin/mocha --compilers es6:babel/register"
   },
   "dependencies": {
-    "node-fetch": "^1.3.3"
+    "node-fetch": "^1.3.3",
+    "url-join": "0.0.1"
   },
   "devDependencies": {
     "babel": "^5.8.23",

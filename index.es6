@@ -1,7 +1,8 @@
 import fetch from 'node-fetch';
+import urljoin from 'url-join';
 
 export function constructUrl(base, path, reqUrl) {
-  return base + path + reqUrl;
+  return urljoin(base, path, reqUrl);
 }
 
 export default (base) => {
