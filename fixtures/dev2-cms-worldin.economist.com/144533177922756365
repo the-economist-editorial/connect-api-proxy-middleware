@@ -1,0 +1,20 @@
+GET /contentasjson/node/10520
+accept-encoding: gzip,deflate
+accept: */*
+
+HTTP/1.1 404 
+date: Tue, 20 Oct 2015 09:02:49 GMT
+server: Apache
+x-drupal-cache: MISS
+etag: "1445331769-0"
+content-language: en
+cache-control: public, max-age=900
+last-modified: Tue, 20 Oct 2015 09:02:49 GMT
+expires: Sun, 19 Nov 1978 05:00:00 GMT
+vary: Cookie
+x-backend-server: web1 D=145202
+connection: close
+transfer-encoding: chunked
+content-type: application/json
+
+{"error":"The content doesn\u0027t exist. The arguments were (node) and (10520)"}
