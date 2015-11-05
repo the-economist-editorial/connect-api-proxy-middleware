@@ -1,13 +1,13 @@
 {
   "name": "@economist/connect-api-proxy-middleware",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "A Connect middleware for Economist Drupal API",
   "author": "The Economist (http://economist.com)",
-  "license": "LicenseRef-LICENSE",
+  "license": "MIT",
   "repository": "git://github.com/the-economist-editorial/connect-api-proxy-middleware",
   "homepage": "https://github.com/the-economist-editorial/connect-api-proxy-middleware",
   "bugs": "https://github.com/the-economist-editorial/connect-api-proxy-middleware/issues",
-  "main": "index.es6",
+  "main": "index.js",
   "config": {
     "lint_opts": "--ignore-path .gitignore --ext .es6"
   },
