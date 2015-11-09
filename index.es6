@@ -21,7 +21,9 @@ export default (base) => {
         response.statusCode = fetchResponseRaw.status;
         return fetchResponseRaw.json();
       }).then((fetchResponse) => {
-        fetchResponse = (overrides.dataOverrides) ? overrides.dataOverrides(fetchResponse) : fetchResponse;
+        const dataCallback = overrides.dataOverrides;
+        fetchResponse = (dataCallback && typeof dataCallback === 'function') ?
+          dataCallback(fetchResponse) : fetchResponse;
         response.end(JSON.stringify(fetchResponse));
       })
       .catch(next);
