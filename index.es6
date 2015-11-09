@@ -10,17 +10,21 @@ export default (base) => {
   return (path, overrides = {}) => {
     return (request, response, next) => {
       const apiUrl = constructUrl(baseUrl, path, request.url);
-      fetch(apiUrl).then((fetchResponse) => {
+      fetch(apiUrl).then((fetchResponseRaw) => {
         const fetchResponseHeaders = {
-          ...fetchResponse.headers.raw(),
+          ...fetchResponseRaw.headers.raw(),
           ...overrides.headerOverrides,
         };
         for (const header in fetchResponseHeaders) {
           response.setHeader(header, fetchResponseHeaders[header]);
         }
-        response.statusCode = fetchResponse.status;
-        fetchResponse.body.pipe(response).on('end', next);
-      }).catch(next);
+        response.statusCode = fetchResponseRaw.status;
+        return fetchResponseRaw.json();
+      }).then((fetchResponse) => {
+        fetchResponse = (overrides.dataOverrides) ? overrides.dataOverrides(fetchResponse) : fetchResponse;
+        response.end(JSON.stringify(fetchResponse));
+      })
+      .catch(next);
     };
   };
 };
