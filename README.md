@@ -9,16 +9,18 @@ Example:
 import proxy from '@economist/connect-api-proxy-middleware';
 import connect from 'connect';
 
-let app = connect();
-
+const app = connect();
 const subDomain = (process.env.NODE_ENV === 'production') ? 'cms-worldin' : 'dev-cms-worldin';
 const economistProxy = proxy(`http://${subDomain}.economist.com/contentasjson/`);
-
+const dataMappingFunc = (data) => {
+  // do some funky stuffs with the complete json response
+}
 app
   .use('/api/article', economistProxy('node', { //expects an id e.g. /api/article/1234 or /api/menu/a-drupal-menu-name
     headerOverrides: {
-      'cache-control': 'public, max-age=60'
-    }
+      'cache-control': 'public, max-age=60',
+    },
+    dataOverrides: dataMappingFunc,
   }))...
 ```
 
